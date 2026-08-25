@@ -47,3 +47,11 @@ option DynamicEventsContent.CityRepopulation
     page = DynamicEventsContent,
     translation = DynamicEventsContent_CityRepopulation,
 }
+
+option DynamicEventsContent.FrameworkTest
+{
+    type = boolean,
+    default = false,
+    page = DynamicEventsContent,
+    translation = DynamicEventsContent_FrameworkTest,
+}
