@@ -69,7 +69,12 @@ local EVENT = {
 
         e:SpawnFire(2, 0, 0)
         e:SpawnSmoke(2, 0, 0)
-        e:SpawnScorch(0, 0, { spread = 1 })
+
+        -- Place a sprite/tile by name (debris, a decal, a static wreck tile).
+        -- Loop it yourself for a scatter, e.g. a patch of scorched floor:
+        for _ = 1, 5 do
+            e:SpawnSprite("floors_burnt_01_" .. DE.rand(1, 8), 0, 0, { radius = 1 })
+        end
     end,
 
     -- Optional recurring tick while the event is active. Here it draws nearby

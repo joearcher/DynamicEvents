@@ -129,17 +129,6 @@ function EH.spawnSprite(x, y, z, spriteName, uid)
     end)
 end
 
-function EH.spawnScorchMarks(x, y, z, radius, uid)
-    local r = radius or 1
-    for dx = -r, r do
-        for dy = -r, r do
-            if math.abs(dx) + math.abs(dy) <= r + 1 then
-                EH.spawnSprite(x + dx, y + dy, z, "floors_burnt_01_" .. DE.rand(1, 8), uid)
-            end
-        end
-    end
-end
-
 -- First of `partIds` that exists on the vehicle and has an item container.
 local function partContainer(vehicle, ...)
     for i = 1, select("#", ...) do
@@ -754,11 +743,12 @@ function EventContext:SpawnSmoke(count, dx, dy, opts)
     EH.spawnSmoke(wx, wy, self.z, count)
 end
 
-function EventContext:SpawnScorch(dx, dy, opts)
-    local o = opts or {}
-    local spread = o.spread or 1
-    local wx, wy = place(self, dx, dy, o, spread)
-    EH.spawnScorchMarks(wx, wy, self.z, spread, tagFor(self, o))
+-- Places a single sprite (a tile/IsoObject) by name: debris, a decal, a scorch
+-- mark, a static wreck tile. Tagged and cleaned up like everything else; loop it
+-- yourself for a scatter. opts.radius jitters the position.
+function EventContext:SpawnSprite(spriteName, dx, dy, opts)
+    local wx, wy, o = place(self, dx, dy, opts)
+    EH.spawnSprite(wx, wy, self.z, spriteName, tagFor(self, o))
 end
 
 DE.EventContext = EventContext

@@ -165,7 +165,7 @@ spawn something cleanup never removes (it outlives the event).
 | `e:SpawnLoot(items, dx, dy, opts)` | `opts.spread`, `opts.chance` |
 | `e:SpawnContainer(type, loot, dx, dy, opts)` | bag/case or moveable crate |
 | `e:SpawnFire(n, dx, dy)` / `e:SpawnSmoke(n, dx, dy)` | |
-| `e:SpawnScorch(dx, dy, opts)` | burnt floor marks |
+| `e:SpawnSprite(name, dx, dy, opts)` | place one sprite/tile by name (debris, decals, a static wreck tile); loop for a scatter |
 
 `SpawnZombies` vs `SpawnHorde`: use `SpawnZombies` for themed, tracked zombies
 that a clear removes (a military crash, a hospital). Use `SpawnHorde` for
