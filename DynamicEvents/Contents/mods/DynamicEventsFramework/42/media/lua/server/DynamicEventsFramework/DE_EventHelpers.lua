@@ -123,7 +123,7 @@ function EH.spawnSprite(x, y, z, spriteName, uid)
     DE.guard("spawnSprite " .. spriteName, function()
         local obj = IsoObject.new(sq, spriteName, "", false)
         if obj then
-            sq:FileObject(obj)
+            sq:AddTileObject(obj)
             EH.tag(obj, uid)
         end
     end)
@@ -290,13 +290,19 @@ function EH.spawnVehicle(x, y, z, vehicleType, opts, uid)
     if not sq then return end
 
     DE.guard("spawnVehicle " .. (vehicleType or "nil"), function()
-        local vehicle = addVehicle(vehicleType, x, y, z)
+        -- addVehicleDebug spawns exactly the requested script, same as the
+        -- vanilla debug console. addVehicle instead consults the zone's
+        -- vehicle distribution and silently substitutes a different (often
+        -- vanilla) vehicle when the requested type isn't part of it - which
+        -- is every one-off event/wreck vehicle. So addVehicleDebug goes
+        -- first; addVehicle is just a last-resort fallback.
+        local vehicle = addVehicleDebug(vehicleType, IsoDirections.N, opts.skin, sq)
         if not vehicle then
-            DE.dbg("addVehicle failed, trying addVehicleDebug for %s", vehicleType)
-            vehicle = addVehicleDebug(vehicleType, IsoDirections.N, opts.skin, sq)
+            DE.dbg("addVehicleDebug failed, trying addVehicle for %s", vehicleType)
+            vehicle = addVehicle(vehicleType, x, y, z)
         end
         if not vehicle then
-            DE.warn("both addVehicle and addVehicleDebug returned nil for %s at (%d, %d, %d)", vehicleType or "?", x, y, z)
+            DE.warn("both addVehicleDebug and addVehicle returned nil for %s at (%d, %d, %d)", vehicleType or "?", x, y, z)
             return
         end
 
